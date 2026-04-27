@@ -5,6 +5,50 @@
 ## Entry
 
 ### Date
+2026-04-27
+
+### Topic
+Promising optimization directions and implementation choices for CKKS-based transciphering
+
+### What I Currently Believe
+- The current literature suggests that CKKS transciphering throughput can be improved substantially through techniques such as CKKS/CI-CKKS context conversion, BB-BTS, lazy SubByte evaluation, and free-XOR style optimizations for XOR-heavy Boolean circuits.
+- These reported gains appear strongest in settings with large SIMD-style batch sizes, AES-CTR-style workloads, and hardware/software environments close to the ones used by the authors, especially GPU-backed execution in the “Less than 1ms” paper.
+- For my likely setup, especially smaller batch sizes and no dedicated GPU, the practical gains may be smaller than the headline numbers reported in the papers.
+- XBOOT looks especially relevant for XOR-heavy CKKS transciphering because it reduces the depth cost of XOR handling and reports strong improvements for AES-style workloads.
+- Lattigo currently looks like the more realistic implementation starting point for my work because it is open source and is explicitly used in XBOOT, whereas access to the authors’ HEaaN-based implementation is uncertain.
+  
+### Why I Believe It
+- Authors reported achieving 0.994ms per AES block for 215215 AES-128 blocks, 1.58× faster throughput than XBOOT in the same implementation environment, and can process 2929 blocks in 2.67s on one GPU.
+- Authors reported reduceing AES-CKKS round depth from 9 to 3, lowers the modulus size from 1555 bits to 830 bits, reduces the ring degree from 216216 to 215215, and achieves AES transciphering of 256 KB in 236 seconds with 5× lower latency and 2.5× higher throughput than the prior state of the art.
+-  The open-source HEAAN/HEaaN family exists publicly in older or related forms, but the specific implementation used in recent high-throughput CKKS transciphering work is not something I can currently assume access to.
+
+### Main Supporting Sources
+- High-Throughput AES Transciphering using CKKS: Less than 1ms
+- XBOOT: Free-XOR Gates for CKKS with Applications to Transciphering
+- 
+
+### What Could Change My Mind
+- I get access to the authors’ implementation from High-Throughput AES Transciphering using CKKS: Less than 1ms and it works well in my environment.
+- A benchmark on my actual target setup shows that the reported advantages do not translate well to smaller batch sizes or CPU-only/macOS execution.
+- Another library or implementation path turns out to be easier to build, test, and modify than Lattigo while still supporting the CKKS features I need.
+
+### What I Am Not Confident About
+- Whether I will get access to the authors’ HEaaN-based implementation.
+- How much of the reported throughput gain depends specifically on GPU support and very large batch sizes.
+- Whether Lattigo is only the most accessible starting point or also the best long-term choice for my project
+
+### Practical Consequence
+- Prioritize an implementation path that is reproducible and accessible now, which currently points toward Lattigo, while separately trying to obtain HEaaN access for comparison.
+
+### Next Action
+- Email the authors of High-Throughput AES Transciphering using CKKS: Less than 1ms to ask whether their implementation is available for research use.
+- Try and get access to HEanN
+
+---
+
+## Entry
+
+### Date
 2026-04-21
 
 ### Topic
@@ -124,4 +168,7 @@ YYYY-MM-DD
 ### Practical Consequence
 
 ### Next Action
-- 
+- Read:
+- Compare:
+- Clarify:
+- Postpone:
